@@ -14,8 +14,6 @@
  */
 package org.eventchain.graphql;
 
-import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.CharStreams;
 import graphql.ExecutionResult;
@@ -135,14 +133,8 @@ public class GraphQLServlet extends HttpServlet implements Servlet, GraphQLMBean
     public static class Request {
         @Getter @Setter
         private String query;
-        @Getter @JsonRawValue
+        @Getter @Setter
         private Map<String, Object> variables = new HashMap<>();
-
-        @SneakyThrows
-        public void setVariables(String v) {
-            variables = new ObjectMapper().readValue(v, new TypeReference<Map<String, Object>>() {});
-        }
-
         @Getter @Setter
         private String operationName;
     }
