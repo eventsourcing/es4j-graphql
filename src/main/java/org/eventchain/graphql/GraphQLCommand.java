@@ -30,6 +30,7 @@ import org.eventchain.layout.Property;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static graphql.Scalars.GraphQLString;
@@ -62,7 +63,8 @@ public abstract class GraphQLCommand<R> extends Command<R> {
 
         Layout<? extends GraphQLCommand> layout = new Layout<>(getClass());
         for (Property property : layout.getProperties()) {
-            property.set(instance, input.get(property.getName()));
+            Object value = input.get(property.getName());
+            property.set(instance, property.getType().isInstanceOf(Optional.class) ? Optional.of(value) : value);
         }
 
         GraphQLContext context = (GraphQLContext) environment.getContext();

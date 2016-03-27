@@ -16,10 +16,8 @@ package org.eventchain.graphql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.CharStreams;
-import graphql.ExecutionResult;
-import graphql.GraphQL;
-import graphql.GraphQLError;
-import graphql.InvalidSyntaxError;
+import graphql.*;
+import graphql.annotations.EnhancedExecutionStrategy;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
@@ -155,7 +153,7 @@ public class GraphQLServlet extends HttpServlet implements Servlet, GraphQLMBean
     }
 
     private void query(String query, Map<String, Object> variables, GraphQLSchema schema, HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ExecutionResult result = new GraphQL(schema).execute(query, new GraphQLContext(repositoryProvider.getRepository(), Optional.of(req), Optional.of(resp), null), variables);
+        ExecutionResult result = new GraphQL(schema, new EnhancedExecutionStrategy()).execute(query, new GraphQLContext(repositoryProvider.getRepository(), Optional.of(req), Optional.of(resp), null), variables);
         resp.setContentType("application/json");
         if (result.getErrors().isEmpty()) {
             Map<String, Object> dict = new HashMap<>();
@@ -163,21 +161,21 @@ public class GraphQLServlet extends HttpServlet implements Servlet, GraphQLMBean
             resp.getWriter().write(new ObjectMapper().writeValueAsString(dict));
         } else {
             result.getErrors().stream().
-                    filter(error -> !(error instanceof InvalidSyntaxError || error instanceof ValidationError || error instanceof GraphQLReportedException)).
-                    forEachOrdered(err -> log.error("{}", err));
+                    filter(error -> (error instanceof ExceptionWhileDataFetching)).
+                    forEachOrdered(err -> log.error("{}", ((ExceptionWhileDataFetching)err).getException()));
 
             resp.setStatus(500);
             List<GraphQLError> errors = getGraphQLErrors(result);
             Map<String, Object> dict = new HashMap<>();
-            dict.put("data", new Object[]{});
             dict.put("errors",errors);
+
             resp.getWriter().write(new ObjectMapper().writeValueAsString(dict));
         }
     }
 
     private List<GraphQLError> getGraphQLErrors(ExecutionResult result) {
         return result.getErrors().stream().
-                        filter(error -> error instanceof InvalidSyntaxError || error instanceof ValidationError || error instanceof GraphQLReportedException).
+                        filter(error -> error instanceof InvalidSyntaxError || error instanceof ValidationError).
                         collect(Collectors.toList());
     }
 }
