@@ -67,9 +67,13 @@ public abstract class GraphQLCommand<R> extends Command<R> {
 
         GraphQLContext context = (GraphQLContext) environment.getContext();
         context.setCommand(instance);
+
+        instance.beforePublishing();
         CompletableFuture<R> future = context.getRepository().publish(instance);
         return future.get();
     }
+
+    protected abstract void beforePublishing();
 
     public static class Mutation extends GraphQLInputObjectType {
         public Mutation(GraphQLObjectType objectType) {
