@@ -55,8 +55,8 @@ public class GraphQLServlet extends HttpServlet implements Servlet, GraphQLMBean
     private List<GraphQLQueryProvider> queryProviders = new ArrayList<>();
     private List<GraphQLMutationProvider> mutationProviders = new ArrayList<>();
 
-    private GraphQLSchema schema;
-    private GraphQLSchema readOnlySchema;
+    GraphQLSchema schema;
+    GraphQLSchema readOnlySchema;
 
     protected void updateSchema() {
         GraphQLObjectType.Builder object = newObject().name("query");

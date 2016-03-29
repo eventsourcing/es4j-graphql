@@ -78,6 +78,7 @@ dependencies {
 
     // Unit testing
     testCompile 'org.testng:testng:6.9.10'
+    testCompile "org.mockito:mockito-core:1.+"
 
     // Remove boilerplate
     compile 'org.projectlombok:lombok:1.16.8'

@@ -42,9 +42,12 @@ import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 public abstract class GraphQLCommand<R> extends Command<R> {
 
     private final Class<R> resultClass;
+    private final Layout<? extends GraphQLCommand> layout;
 
+    @SneakyThrows
     public GraphQLCommand(Class<R> resultClass) {
         this.resultClass = resultClass;
+        layout = new Layout<>(getClass());
     }
 
     private GraphQLFieldDefinition mutation;
@@ -61,7 +64,6 @@ public abstract class GraphQLCommand<R> extends Command<R> {
 
         instance.setClientMutationId((String) input.get("clientMutationId"));
 
-        Layout<? extends GraphQLCommand> layout = new Layout<>(getClass());
         for (Property property : layout.getProperties()) {
             Object value = input.get(property.getName());
             property.set(instance, property.getType().isInstanceOf(Optional.class) ? Optional.of(value) : value);
@@ -75,7 +77,7 @@ public abstract class GraphQLCommand<R> extends Command<R> {
         return future.get();
     }
 
-    protected abstract void beforePublishing();
+    protected void beforePublishing() {};
 
     public static class Mutation extends GraphQLInputObjectType {
         public Mutation(GraphQLObjectType objectType) {
