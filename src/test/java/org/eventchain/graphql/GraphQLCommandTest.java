@@ -10,7 +10,6 @@ import graphql.schema.GraphQLSchema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Value;
 import lombok.experimental.Accessors;
 import org.eventchain.Repository;
 import org.testng.annotations.Test;
@@ -22,9 +21,10 @@ import java.util.concurrent.CompletableFuture;
 import static graphql.schema.GraphQLObjectType.newObject;
 import static graphql.schema.GraphQLSchema.newSchema;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
-import static org.testng.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class GraphQLCommandTest {
 
