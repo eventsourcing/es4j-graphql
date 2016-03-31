@@ -97,7 +97,7 @@ dependencies {
 
     // GraphQL
     compile 'com.graphql-java:graphql-java:2.0.0'
-    compile 'graphql-java-annotations:graphql-java-annotations:0.5.0'
+    compile 'graphql-java-annotations:graphql-java-annotations:0.6.0'
 
     // JSON
     compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'
