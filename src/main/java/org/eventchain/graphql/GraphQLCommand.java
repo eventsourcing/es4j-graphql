@@ -81,7 +81,7 @@ public abstract class GraphQLCommand<R> extends Command<R> {
 
     public static class Mutation extends GraphQLInputObjectType {
         public Mutation(GraphQLObjectType objectType) {
-            super("input", objectType.getDescription(), fields(objectType));
+            super(objectType.getName() + "Input", objectType.getDescription(), fields(objectType));
         }
 
         private static List<GraphQLInputObjectField> fields(GraphQLObjectType objectType) {
@@ -101,7 +101,7 @@ public abstract class GraphQLCommand<R> extends Command<R> {
     @SneakyThrows @LayoutIgnore @SuppressWarnings("unused")
     public GraphQLFieldDefinition getMutation() {
         if (mutation == null) {
-            GraphQLObjectType objectType =  GraphQLAnnotations.object(this.getClass());
+            GraphQLObjectType objectType = GraphQLAnnotations.object(this.getClass());
             GraphQLObjectType resultType = GraphQLAnnotations.objectBuilder(resultClass).
                     name(getClass().getSimpleName()).
                     field(newFieldDefinition().name("clientMutationId").type(GraphQLString).dataFetcher(e -> ((GraphQLCommand)((GraphQLContext)e.getContext()).getCommand()).getClientMutationId()).build()).build();
