@@ -13,12 +13,17 @@ plugins {
     id "com.github.hierynomus.license" version "0.12.1"
     id 'me.champeau.gradle.jmh' version '0.3.0'
     id "com.jfrog.bintray" version "1.6"
-
+    id 'net.researchgate.release' version '2.3.4'
 }
 
-version = "0.1.0-SNAPSHOT"
-
 apply plugin: 'idea'
+
+release {
+    tagTemplate = 'v${version}'
+    failOnPublishNeeded = false
+}
+
+afterReleaseBuild.dependsOn bintrayUpload
 
 repositories {
     jcenter()
