@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Eventchain team
+ * Copyright 2016 Eventsourcing team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  */
-package org.eventchain.graphql;
+package com.eventsourcing.graphql;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.CharStreams;
@@ -46,7 +46,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 import static graphql.schema.GraphQLSchema.newSchema;
 
 @Slf4j
-@Component(property = {"alias=/eventchain-graphql", "jmx.objectname=org.eventchain.graphql:type=graphql"})
+@Component(property = {"alias=/graphql", "jmx.objectname=com.eventsourcing.graphql:type=graphql"})
 public class GraphQLServlet extends HttpServlet implements Servlet, GraphQLMBean {
 
     @Reference

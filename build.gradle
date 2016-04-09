@@ -42,15 +42,19 @@ apply plugin: 'maven-publish'
 jar {
     manifest {
         instruction 'Require-Capability', 'osgi.extender'
-        instruction 'Bundle-Activator', 'org.eventchain.graphql.BundleActivator'
+        instruction 'Bundle-Activator', 'com.eventsourcing.graphql.BundleActivator'
     }
+}
+
+license {
+    exclude 'introspectionQuery'
 }
 
 publishing {
     publications {
         MyPublication(MavenPublication) {
             from components.java
-            groupId 'org.eventchain'
+            groupId 'com.eventsourcing'
             artifactId project.name
             version project.version
         }
@@ -62,11 +66,11 @@ bintray {
     key = System.getenv('BINTRAY_KEY')
     publications = ['MyPublication']
     pkg {
-        repo = 'org.eventchain'
+        repo = 'maven'
         name = project.name
-        userOrg = 'eventchain'
+        userOrg = 'eventsourcing'
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/eventchain/eventchain-graphql'
+        vcsUrl = 'https://github.com/eventsourcing/eventsourcing-graphql'
         version {
             name = project.version
         }
@@ -94,8 +98,8 @@ dependencies {
     compile 'org.osgi:org.osgi.service.component:1.3.0'
     compile 'biz.aQute.bnd:biz.aQute.bndlib:3.1.0'
 
-    // Eventchain
-    compile 'org.eventchain:eventchain-core:0.2.2'
+    // ES4J
+    compile 'com.eventsourcing:eventsourcing-core:0.2.4'
 
     // Servlet
     compile 'javax.servlet:javax.servlet-api:3.1.0'

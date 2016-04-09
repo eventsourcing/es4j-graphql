@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Eventchain team
+ * Copyright 2016 Eventsourcing team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,10 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  */
-package org.eventchain.graphql;
+package com.eventsourcing.graphql;
 
-public interface GraphQLMBean {
-    String[] getQueries();
-    String[] getMutations();
-    String executeQuery(String query);
+import graphql.annotations.DefaultTypeFunction;
+import org.osgi.framework.BundleContext;
+
+import java.util.UUID;
+
+public class BundleActivator implements org.osgi.framework.BundleActivator {
+    @Override
+    public void start(BundleContext context) throws Exception {
+        DefaultTypeFunction.register(UUID.class, new UUIDFunction());
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
+    }
 }

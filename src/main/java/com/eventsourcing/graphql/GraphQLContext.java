@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Eventchain team
+ * Copyright 2016 Eventsourcing team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  */
-package org.eventchain.graphql;
+package com.eventsourcing.graphql;
 
+import com.eventsourcing.Command;
+import com.eventsourcing.Repository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.eventchain.Command;
-import org.eventchain.Repository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

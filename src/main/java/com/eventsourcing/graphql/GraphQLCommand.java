@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Eventchain team
+ * Copyright 2016 Eventsourcing team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,8 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  */
-package org.eventchain.graphql;
+package com.eventsourcing.graphql;
 
+import com.eventsourcing.Command;
+import com.eventsourcing.layout.Layout;
+import com.eventsourcing.layout.LayoutIgnore;
+import com.eventsourcing.layout.Property;
 import graphql.annotations.GraphQLAnnotations;
 import graphql.annotations.GraphQLField;
 import graphql.schema.*;
@@ -22,10 +26,6 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.eventchain.Command;
-import org.eventchain.layout.Layout;
-import org.eventchain.layout.LayoutIgnore;
-import org.eventchain.layout.Property;
 
 import java.util.ArrayList;
 import java.util.List;
