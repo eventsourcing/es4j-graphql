@@ -29,7 +29,7 @@ The are a few important components this package provides:
   to define which "domain model" views and which commands you are going to expose.
 * GraphQLServlet as an entry point servlet. Use `bindQueryProvider`/`bindMutationProvider` in a subclass or automatically wire
 them in OSGi.
-* GraphQLCommand is a superclass for all ES$J command-backed mutations.
+* GraphQLCommand is a superclass for all ES4J command-backed mutations.
 
 ## Commands as mutations
 
