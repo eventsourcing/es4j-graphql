@@ -1,4 +1,4 @@
-![Download](https://api.bintray.com/packages/eventsourcing/maven/eventsourcing-graphql/images/download.svg)](https://bintray.com/eventsourcing/maven/eventsourcing-graphql/_latestVersion)
+[![Download](https://api.bintray.com/packages/eventsourcing/maven/eventsourcing-graphql/images/download.svg)](https://bintray.com/eventsourcing/maven/eventsourcing-graphql/_latestVersion)
 
 # ES4J (Eventsourcing for Java) GraphQL adaptor
 
