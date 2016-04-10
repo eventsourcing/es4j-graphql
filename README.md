@@ -25,7 +25,7 @@ dependencies {
 
 The are a few important components this package provides:
 
-* GraphQLQueryProvider/GrapgQLMutationProvider interfaces. These will allow you
+* GraphQLQueryProvider/GraphQLMutationProvider interfaces. These will allow you
   to define which "domain model" views and which commands you are going to expose.
 * GraphQLServlet as an entry point servlet. Use `bindQueryProvider`/`bindMutationProvider` in a subclass or automatically wire
 them in OSGi.
