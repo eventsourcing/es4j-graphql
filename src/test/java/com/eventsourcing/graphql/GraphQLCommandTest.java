@@ -22,6 +22,7 @@ import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLName;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLSchema;
+import graphql.servlet.GraphQLMutationProvider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,7 +65,7 @@ public class GraphQLCommandTest {
         TestCommand command = new TestCommand();
         Repository repository = mock(Repository.class);
         when(repository.publish(any())).thenReturn(CompletableFuture.completedFuture(new Result("passed")));
-        GraphQLContext<TestCommand> context = new GraphQLContext<>(repository, Optional.empty(), Optional.empty(), command);
+        GraphQLContext<TestCommand> context = new GraphQLContext<>(repository, Optional.empty(), Optional.empty());
         GraphQLFieldDefinition mutation = command.getMutation();
         GraphQLSchema schema = newSchema().query(newObject().name("query").build()).
                 mutation(newObject().name("mutation").field(mutation).build()).build();

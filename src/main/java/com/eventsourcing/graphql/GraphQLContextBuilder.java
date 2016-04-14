@@ -14,25 +14,23 @@
  */
 package com.eventsourcing.graphql;
 
-import com.eventsourcing.Command;
-import com.eventsourcing.Repository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-public class GraphQLContext<C extends Command> extends graphql.servlet.GraphQLContext {
-    @Getter @Setter
-    private Repository repository;
-    @Getter @Setter
-    private C command;
+public class GraphQLContextBuilder implements graphql.servlet.GraphQLContextBuilder {
 
-    public GraphQLContext(Repository repository, Optional<HttpServletRequest> request, Optional<HttpServletResponse> response) {
-        super(request, response);
-        this.repository = repository;
+    private GraphQLRepositoryProvider repositoryProvider;
+
+    @Reference
+    public void setRepositoryProvider(GraphQLRepositoryProvider repositoryProvider) {
+        this.repositoryProvider = repositoryProvider;
     }
 
+    @Override
+    public GraphQLContext build(Optional<HttpServletRequest> req, Optional<HttpServletResponse> resp) {
+        return new GraphQLContext<>(repositoryProvider.getRepository(), req, resp);
+    }
 }

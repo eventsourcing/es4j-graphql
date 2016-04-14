@@ -23,11 +23,11 @@ dependencies {
 
 # Usage
 
-The are a few important components this package provides:
+The are a few important components this package provides (some of them come from [graphql-java-servlet](https://github.com/yrashk/graphql-java-servlet)):
 
 * GraphQLQueryProvider/GraphQLMutationProvider interfaces. These will allow you
   to define which "domain model" views and which commands you are going to expose.
-* GraphQLServlet as an entry point servlet. Use `bindQueryProvider`/`bindMutationProvider` in a subclass or automatically wire
+* GraphQLServlet as an entry point servlet. Use `bindQueryProvider`/`bindMutationProvider` i or automatically wire
 them in OSGi.
 * GraphQLCommand is a superclass for all ES4J command-backed mutations.
 
