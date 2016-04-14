@@ -27,10 +27,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static graphql.Scalars.GraphQLString;
@@ -99,7 +96,7 @@ public abstract class GraphQLCommand<R> extends Command<R> {
     }
 
     @SneakyThrows @LayoutIgnore @SuppressWarnings("unused")
-    public GraphQLFieldDefinition getMutation() {
+    public Collection<GraphQLFieldDefinition> getMutations() {
         if (mutation == null) {
             GraphQLObjectType objectType = GraphQLAnnotations.object(this.getClass());
             GraphQLObjectType resultType = GraphQLAnnotations.objectBuilder(resultClass).
@@ -114,7 +111,7 @@ public abstract class GraphQLCommand<R> extends Command<R> {
 
             mutation = builder.build();
         }
-        return mutation;
+        return Collections.singleton(mutation);
     }
 
     @Getter(onMethod = @__({@GraphQLField, @LayoutIgnore})) @Setter

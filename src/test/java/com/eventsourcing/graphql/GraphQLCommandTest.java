@@ -29,6 +29,8 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -66,9 +68,9 @@ public class GraphQLCommandTest {
         Repository repository = mock(Repository.class);
         when(repository.publish(any())).thenReturn(CompletableFuture.completedFuture(new Result("passed")));
         GraphQLContext<TestCommand> context = new GraphQLContext<>(repository, Optional.empty(), Optional.empty());
-        GraphQLFieldDefinition mutation = command.getMutation();
+        Collection<GraphQLFieldDefinition> mutation = command.getMutations();
         GraphQLSchema schema = newSchema().query(newObject().name("query").build()).
-                mutation(newObject().name("mutation").field(mutation).build()).build();
+                mutation(newObject().name("mutation").fields(new ArrayList(mutation)).build()).build();
         GraphQL graphQL = new GraphQL(schema, new EnhancedExecutionStrategy());
         ExecutionResult result = graphQL.execute("mutation { test(input: {value: \"test\", clientMutationId: \"1\"}) { clientMutationId, value} }", context);
         assertTrue(result.getErrors().isEmpty());
