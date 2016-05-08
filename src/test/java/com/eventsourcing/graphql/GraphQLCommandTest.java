@@ -63,7 +63,9 @@ public class GraphQLCommandTest {
         GraphQLSchema schema = newSchema().query(newObject().name("query").build()).
                 mutation(newObject().name("mutation").fields(new ArrayList(mutation)).build()).build();
         GraphQL graphQL = new GraphQL(schema, new EnhancedExecutionStrategy());
-        ExecutionResult result = graphQL.execute("mutation { test(input: {value: \"test\", clientMutationId: \"1\"}) { clientMutationId, value} }", context);
+        ExecutionResult result = graphQL.execute(
+                "mutation { test(input: {value: \"test\", clientMutationId: \"1\"}) { clientMutationId, value} }",
+                context);
         assertTrue(result.getErrors().isEmpty());
         Map<String, Object> data = (Map<String, Object>) result.getData();
         Map<String, Object> test = (Map<String, Object>) data.get("test");

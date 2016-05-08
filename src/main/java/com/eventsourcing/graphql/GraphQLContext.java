@@ -7,7 +7,6 @@ package com.eventsourcing.graphql;
 
 import com.eventsourcing.Command;
 import com.eventsourcing.Repository;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +20,8 @@ public class GraphQLContext<C extends Command> extends graphql.servlet.GraphQLCo
     @Getter @Setter
     private C command;
 
-    public GraphQLContext(Repository repository, Optional<HttpServletRequest> request, Optional<HttpServletResponse> response) {
+    public GraphQLContext(Repository repository, Optional<HttpServletRequest> request,
+                          Optional<HttpServletResponse> response) {
         super(request, response);
         this.repository = repository;
     }

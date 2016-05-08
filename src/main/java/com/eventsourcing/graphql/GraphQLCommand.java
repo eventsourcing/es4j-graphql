@@ -40,7 +40,7 @@ public abstract class GraphQLCommand<R> extends Command<R> {
 
     private GraphQLFieldDefinition mutation;
 
-    @Setter @Getter (onMethod = @__(@LayoutIgnore)) @Accessors(fluent = true)
+    @Setter @Getter(onMethod = @__(@LayoutIgnore)) @Accessors(fluent = true)
     private DataFetchingEnvironment environment;
 
     @SneakyThrows @SuppressWarnings("unchecked")
@@ -65,7 +65,9 @@ public abstract class GraphQLCommand<R> extends Command<R> {
         return future.get();
     }
 
-    protected void beforePublishing() {};
+    protected void beforePublishing() {}
+
+    ;
 
     public static class Mutation extends GraphQLInputObjectType {
         public Mutation(GraphQLObjectType objectType) {
@@ -75,11 +77,16 @@ public abstract class GraphQLCommand<R> extends Command<R> {
         private static List<GraphQLInputObjectField> fields(GraphQLObjectType objectType) {
             List<GraphQLInputObjectField> fields = new ArrayList<>();
             for (GraphQLFieldDefinition field : objectType.getFieldDefinitions()) {
-                GraphQLInputObjectField inputField = newInputObjectField().
-                        name(field.getName()).
-                        description(field.getDescription()).
-                        type(field.getType() instanceof GraphQLObjectType ? GraphQLAnnotations.inputObject((GraphQLObjectType) field.getType()) : (GraphQLInputType) field.getType()).
-                        build();
+                GraphQLInputObjectField inputField = newInputObjectField()
+                        .name(field.getName())
+                        .description(field.getDescription())
+                        .type(field.getType() instanceof
+                                      GraphQLObjectType ? GraphQLAnnotations
+                                .inputObject(
+                                        (GraphQLObjectType) field
+                                                .getType()) : (GraphQLInputType) field
+                                .getType())
+                        .build();
                 fields.add(inputField);
             }
             return fields;
@@ -90,15 +97,25 @@ public abstract class GraphQLCommand<R> extends Command<R> {
     public Collection<GraphQLFieldDefinition> getMutations() {
         if (mutation == null) {
             GraphQLObjectType objectType = GraphQLAnnotations.object(this.getClass());
-            GraphQLObjectType resultType = GraphQLAnnotations.objectBuilder(resultClass).
-                    name(getClass().getSimpleName()).
-                    field(newFieldDefinition().name("clientMutationId").type(GraphQLString).dataFetcher(e -> ((GraphQLCommand)((GraphQLContext)e.getContext()).getCommand()).getClientMutationId()).build()).build();
+            GraphQLObjectType resultType = GraphQLAnnotations.objectBuilder(resultClass)
+                                                             .name(getClass().getSimpleName())
+                                                             .field(newFieldDefinition().name("clientMutationId")
+                                                                                        .type(GraphQLString)
+                                                                                        .dataFetcher(
+                                                                                                e -> ((GraphQLCommand) ((GraphQLContext) e
+                                                                                                        .getContext())
+                                                                                                        .getCommand())
+                                                                                                        .getClientMutationId())
+                                                                                        .build()).build();
 
-            GraphQLFieldDefinition.Builder builder = newFieldDefinition().
-                    name(objectType.getName()).
-                    type(resultType).
-                    argument(newArgument().name("input").type(new Mutation(objectType)).build()).
-                    dataFetcher(this::mutate);
+            GraphQLFieldDefinition.Builder builder = newFieldDefinition()
+                    .name(objectType.getName())
+                    .type(resultType)
+                    .argument(newArgument().name("input")
+                                           .type(new Mutation(
+                                                   objectType))
+                                           .build())
+                    .dataFetcher(this::mutate);
 
             mutation = builder.build();
         }
