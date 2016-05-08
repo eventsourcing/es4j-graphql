@@ -82,7 +82,7 @@ bintray {
         repo = 'maven'
         name = project.name
         userOrg = 'eventsourcing'
-        licenses = ['Apache-2.0']
+        licenses = ['MPL-2.0']
         vcsUrl = 'https://github.com/eventsourcing/eventsourcing-graphql'
         version {
             name = project.version
