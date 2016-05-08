@@ -39,6 +39,10 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
+license {
+        header file('LICENSE-HEADER')
+}
+
 jar {
     manifest {
         instruction 'Require-Capability', 'osgi.extender'
