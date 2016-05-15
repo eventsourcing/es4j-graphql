@@ -40,7 +40,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 license {
-        header file('LICENSE-HEADER')
+    header file('LICENSE-HEADER')
 }
 
 jar {
@@ -97,6 +97,9 @@ dependencies {
 
     // Useful utilities
     compile 'com.google.guava:guava:19.0'
+
+    // Reflections API
+    compile 'org.reflections:reflections:0.9.10'
 
     // Unit testing
     testCompile 'org.testng:testng:6.9.10'

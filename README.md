@@ -36,13 +36,9 @@ them in OSGi.
 ```java
 @Accessors(fluent = true)
 @GraphQLName("test")
-public static class TestCommand extends GraphQLCommand<String> implements GraphQLMutationProvider {
+public static class TestCommand extends GraphQLCommand<String> {
     @Getter(onMethod = @__(@GraphQLField)) @Setter
     private String value;
-
-    public TestCommand() {
-        super(Result.class);
-    }
 
     public Stream<Event> events(Repository repository) {
          return Stream.of(...);
@@ -54,8 +50,9 @@ public static class TestCommand extends GraphQLCommand<String> implements GraphQ
 }
 ```
 
-Since it implements `GraphQLMutationProvider`, it can be bound to the servlet
-and will be automatically exposed as `test(input: {value: <string>, clientMutationId: <string>})`
+There are two ways to expose such commands, one is to use `PackageGrapgQLMutationProvider` to scan
+all relevant packages to find subclasses of `GraphQLCommand` in those packages. For OSGi environments,
+`BundleGraphQLMutationProvider` should be used to scan relevant bundles.
 
 ## Domain models as queries
 
