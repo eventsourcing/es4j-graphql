@@ -19,6 +19,8 @@ public class GraphQLContext<C extends Command> extends graphql.servlet.GraphQLCo
     private Repository repository;
     @Getter @Setter
     private C command;
+    @Getter @Setter
+    private String clientMutationId;
 
     public GraphQLContext(Repository repository, Optional<HttpServletRequest> request,
                           Optional<HttpServletResponse> response) {
