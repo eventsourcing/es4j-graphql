@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.eventsourcing:eventsourcing-graphql:0.2.2'
+  compile 'com.eventsourcing:eventsourcing-graphql:0.3.0'
 }
 ```
 
