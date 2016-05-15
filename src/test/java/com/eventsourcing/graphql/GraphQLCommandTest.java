@@ -13,7 +13,6 @@ import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLName;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLSchema;
-import graphql.servlet.GraphQLMutationProvider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,24 +43,20 @@ public class GraphQLCommandTest {
 
     @Accessors(fluent = true)
     @GraphQLName("test")
-    public static class TestCommand extends GraphQLCommand<Result> implements GraphQLMutationProvider {
+    public static class TestCommand extends GraphQLCommand<Result>  {
         @Getter(onMethod = @__(@GraphQLField)) @Setter
         private String value;
-
-        public TestCommand() {
-            super(Result.class);
-        }
     }
 
     @Test
     public void test() {
-        TestCommand command = new TestCommand();
         Repository repository = mock(Repository.class);
         when(repository.publish(any())).thenReturn(CompletableFuture.completedFuture(new Result("passed")));
         GraphQLContext<TestCommand> context = new GraphQLContext<>(repository, Optional.empty(), Optional.empty());
-        Collection<GraphQLFieldDefinition> mutation = command.getMutations();
+        Collection<GraphQLFieldDefinition> mutations = new PackageGraphQLMutationProvider(
+                new Package[]{this.getClass().getPackage()}).getMutations();
         GraphQLSchema schema = newSchema().query(newObject().name("query").build()).
-                mutation(newObject().name("mutation").fields(new ArrayList(mutation)).build()).build();
+                mutation(newObject().name("mutation").fields(new ArrayList(mutations)).build()).build();
         GraphQL graphQL = new GraphQL(schema, new EnhancedExecutionStrategy());
         ExecutionResult result = graphQL.execute(
                 "mutation { test(input: {value: \"test\", clientMutationId: \"1\"}) { clientMutationId, value} }",
