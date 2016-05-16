@@ -5,6 +5,7 @@
  */
 package com.eventsourcing.graphql;
 
+import com.eventsourcing.Command;
 import com.eventsourcing.Entity;
 import com.eventsourcing.layout.Layout;
 import com.eventsourcing.layout.Property;
@@ -36,43 +37,45 @@ public abstract class AbstractGraphQLMutationProvider implements GraphQLMutation
                     !Modifier.isAbstract(klass.getModifiers());
 
     @SneakyThrows
-    protected GraphQLFieldDefinition getMutation(Class<? extends GraphQLCommand> klass) {
+    protected GraphQLFieldDefinition getMutation(Class<? extends Command> klass) {
         return getMutation(klass, (Class) ((ParameterizedType) klass.getAnnotatedSuperclass().getType())
                 .getActualTypeArguments()[0]);
     }
 
     @SneakyThrows
-    protected GraphQLFieldDefinition getMutation(Class<? extends GraphQLCommand> klass, Class resultClass) {
-        GraphQLObjectType objectType = GraphQLAnnotations.object(klass);
+    protected GraphQLFieldDefinition getMutation(Class<? extends Command> klass, Class resultClass) {
+        GraphQLObjectType objectType = GraphQLAnnotations.objectBuilder(klass)
+                                                         .field(newFieldDefinition().name("clientMutationId")
+                                                                                    .type(GraphQLString)
+                                                                                    .build()).build();
         GraphQLObjectType resultType = GraphQLAnnotations.objectBuilder(resultClass)
                                                          .name(getClass().getSimpleName())
                                                          .field(newFieldDefinition().name("clientMutationId")
                                                                                     .type(GraphQLString)
                                                                                     .dataFetcher(
-                                                                                            e -> ((GraphQLCommand) ((GraphQLContext) e
+                                                                                            e -> ((GraphQLContext) e
                                                                                                     .getContext())
-                                                                                                    .getCommand())
                                                                                                     .getClientMutationId())
                                                                                     .build()).build();
 
-        Layout<? extends GraphQLCommand> layout = new Layout<>(klass);
+        Layout<? extends Command> layout = new Layout<>(klass);
         GraphQLFieldDefinition.Builder builder = newFieldDefinition()
                 .name(objectType.getName())
                 .type(resultType)
                 .argument(newArgument().name("input")
-                                       .type(new Mutation(
-                                               objectType))
+                                       .type(new Mutation(objectType))
                                        .build())
                 .dataFetcher(new DataFetcher() {
                     @SneakyThrows
                     @Override public Object get(DataFetchingEnvironment environment) {
-                        GraphQLCommand instance = klass.newInstance();
-                        instance.environment(environment);
+                        Command instance = klass.newInstance();
+                        GraphQLContext context = (GraphQLContext) environment.getContext();
 
                         Map<String, Object> input = (Map<String, Object>) environment.getArguments().values()
                                                                                      .toArray()[0];
 
-                        instance.setClientMutationId((String) input.get("clientMutationId"));
+                        String clientMutationId = (String) input.get("clientMutationId");
+                        context.setClientMutationId(clientMutationId);
 
                         for (Property property : layout.getProperties()) {
                             Object value = input.get(property.getName());
@@ -80,10 +83,8 @@ public abstract class AbstractGraphQLMutationProvider implements GraphQLMutation
                                          property.getType().isInstanceOf(Optional.class) ? Optional.of(value) : value);
                         }
 
-                        GraphQLContext context = (GraphQLContext) environment.getContext();
                         context.setCommand(instance);
 
-                        instance.beforePublishing();
                         CompletableFuture future = context.getRepository().publish(instance);
                         return future.get();
                     }

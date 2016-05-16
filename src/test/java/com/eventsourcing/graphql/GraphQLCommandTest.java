@@ -5,6 +5,7 @@
  */
 package com.eventsourcing.graphql;
 
+import com.eventsourcing.Command;
 import com.eventsourcing.Repository;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -43,7 +44,7 @@ public class GraphQLCommandTest {
 
     @Accessors(fluent = true)
     @GraphQLName("test")
-    public static class TestCommand extends GraphQLCommand<Result>  {
+    public static class TestCommand extends Command<Result> {
         @Getter(onMethod = @__(@GraphQLField)) @Setter
         private String value;
     }

@@ -5,6 +5,7 @@
  */
 package com.eventsourcing.graphql;
 
+import com.eventsourcing.Command;
 import graphql.schema.GraphQLFieldDefinition;
 import lombok.SneakyThrows;
 import org.osgi.framework.FrameworkUtil;
@@ -24,10 +25,10 @@ public class BundleGraphQLMutationProvider extends AbstractGraphQLMutationProvid
     }
 
     @Override public Collection<GraphQLFieldDefinition> getMutations() {
-        return findSubTypesOf(classInABundle, GraphQLCommand.class).stream()
-                          .filter(classPredicate)
-                          .map(this::getMutation)
-                          .collect(Collectors.toSet());
+        return findSubTypesOf(classInABundle, Command.class).stream()
+                                                            .filter(classPredicate)
+                                                            .map(this::getMutation)
+                                                            .collect(Collectors.toSet());
     }
 
     private <T> List<Class<? extends T>> findSubTypesOf(Class<?> classInABundle, Class<T> superclass) {
