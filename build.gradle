@@ -116,7 +116,7 @@ dependencies {
     compile 'biz.aQute.bnd:biz.aQute.bndlib:3.1.0'
 
     // ES4J
-    compile 'com.eventsourcing:eventsourcing-core:0.2.4'
+    compile 'com.eventsourcing:eventsourcing-core:0.4.0-SNAPSHOT'
 
     // Servlet
     compile 'javax.servlet:javax.servlet-api:3.1.0'
@@ -152,3 +152,8 @@ idea {
         }
     }
 }
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-parameters"
+}
+

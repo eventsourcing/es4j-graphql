@@ -9,6 +9,7 @@ import com.eventsourcing.Command;
 import com.eventsourcing.Entity;
 import com.eventsourcing.layout.Layout;
 import com.eventsourcing.layout.Property;
+import com.eventsourcing.layout.types.OptionalTypeHandler;
 import graphql.annotations.GraphQLAnnotations;
 import graphql.schema.*;
 import graphql.servlet.GraphQLMutationProvider;
@@ -16,10 +17,7 @@ import lombok.SneakyThrows;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
@@ -37,13 +35,13 @@ public abstract class AbstractGraphQLMutationProvider implements GraphQLMutation
                     !Modifier.isAbstract(klass.getModifiers());
 
     @SneakyThrows
-    protected GraphQLFieldDefinition getMutation(Class<? extends Command> klass) {
+    protected <T extends Command> GraphQLFieldDefinition getMutation(Class<T> klass) {
         return getMutation(klass, (Class) ((ParameterizedType) klass.getAnnotatedSuperclass().getType())
-                .getActualTypeArguments()[0]);
+                .getActualTypeArguments()[1]);
     }
 
     @SneakyThrows
-    protected GraphQLFieldDefinition getMutation(Class<? extends Command> klass, Class resultClass) {
+    protected <T extends Command> GraphQLFieldDefinition getMutation(Class<T> klass, Class resultClass) {
         GraphQLObjectType objectType = GraphQLAnnotations.objectBuilder(klass)
                                                          .field(newFieldDefinition().name("clientMutationId")
                                                                                     .type(GraphQLString)
@@ -58,17 +56,17 @@ public abstract class AbstractGraphQLMutationProvider implements GraphQLMutation
                                                                                                     .getClientMutationId())
                                                                                     .build()).build();
 
-        Layout<? extends Command> layout = new Layout<>(klass);
+        Layout<T> layout = Layout.forClass(klass);
+        Mutation mutationType = new Mutation(objectType);
         GraphQLFieldDefinition.Builder builder = newFieldDefinition()
                 .name(objectType.getName())
                 .type(resultType)
                 .argument(newArgument().name("input")
-                                       .type(new Mutation(objectType))
+                                       .type(mutationType)
                                        .build())
                 .dataFetcher(new DataFetcher() {
                     @SneakyThrows
                     @Override public Object get(DataFetchingEnvironment environment) {
-                        Command instance = klass.newInstance();
                         GraphQLContext context = (GraphQLContext) environment.getContext();
 
                         Map<String, Object> input = (Map<String, Object>) environment.getArguments().values()
@@ -77,11 +75,15 @@ public abstract class AbstractGraphQLMutationProvider implements GraphQLMutation
                         String clientMutationId = (String) input.get("clientMutationId");
                         context.setClientMutationId(clientMutationId);
 
+                        Map<Property<T>, Object> values = new HashMap<>();
                         for (Property property : layout.getProperties()) {
                             Object value = input.get(property.getName());
-                            property.set(instance,
-                                         property.getType().isInstanceOf(Optional.class) ? Optional.of(value) : value);
+                            Object val = property.getTypeHandler() instanceof OptionalTypeHandler ? Optional
+                                    .of(value) : value;
+                            values.put(property, val);
                         }
+
+                        Command instance = layout.instantiate(values);
 
                         context.setCommand(instance);
 

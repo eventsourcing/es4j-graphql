@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.eventsourcing:eventsourcing-graphql:0.3.0'
+  compile 'com.eventsourcing:eventsourcing-graphql:0.3.1'
 }
 ```
 
@@ -29,24 +29,15 @@ The are a few important components this package provides (some of them come from
   to define which "domain model" views and which commands you are going to expose.
 * GraphQLServlet as an entry point servlet. Use `bindQueryProvider`/`bindMutationProvider` i or automatically wire
 them in OSGi.
-* GraphQLCommand is a superclass for all ES4J command-backed mutations.
 
 ## Commands as mutations
 
 ```java
 @Accessors(fluent = true)
 @GraphQLName("test")
-public static class TestCommand extends GraphQLCommand<String> {
-    @Getter(onMethod = @__(@GraphQLField)) @Setter
+@Value
+public static class TestCommand extends StandardCommand<String> {
     private String value;
-
-    public Stream<Event> events(Repository repository) {
-         return Stream.of(...);
-    }
-
-    public String onCompletion() {
-         return value;
-    }
 }
 ```
 

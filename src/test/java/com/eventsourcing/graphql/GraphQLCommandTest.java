@@ -5,18 +5,16 @@
  */
 package com.eventsourcing.graphql;
 
-import com.eventsourcing.Command;
 import com.eventsourcing.Repository;
+import com.eventsourcing.StandardCommand;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.annotations.EnhancedExecutionStrategy;
 import graphql.annotations.GraphQLField;
 import graphql.annotations.GraphQLName;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLSchema;
+import graphql.schema.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.testng.annotations.Test;
 
@@ -36,6 +34,7 @@ import static org.testng.Assert.assertTrue;
 
 public class GraphQLCommandTest {
 
+    @Accessors(fluent = true)
     @AllArgsConstructor
     public static class Result {
         @Getter(onMethod = @__(@GraphQLField))
@@ -44,9 +43,12 @@ public class GraphQLCommandTest {
 
     @Accessors(fluent = true)
     @GraphQLName("test")
-    public static class TestCommand extends Command<Result> {
-        @Getter(onMethod = @__(@GraphQLField)) @Setter
-        private String value;
+    public static class TestCommand extends StandardCommand<Void, Result> {
+        @Getter(onMethod = @__(@GraphQLField))
+        private final String value;
+
+        public TestCommand(String value) {this.value = value;}
+
     }
 
     @Test

@@ -6,6 +6,7 @@
 package com.eventsourcing.graphql;
 
 import com.eventsourcing.Command;
+import com.eventsourcing.StandardCommand;
 import graphql.schema.GraphQLFieldDefinition;
 import org.reflections.Configuration;
 import org.reflections.Reflections;
@@ -33,7 +34,7 @@ public class PackageGraphQLMutationProvider extends AbstractGraphQLMutationProvi
     @Override public Collection<GraphQLFieldDefinition> getMutations() {
         Configuration configuration = ConfigurationBuilder.build((Object[]) packages).addClassLoaders(classLoaders);
         Reflections reflections = new Reflections(configuration);
-        return reflections.getSubTypesOf(Command.class).stream()
+        return reflections.getSubTypesOf(StandardCommand.class).stream()
                           .filter(classPredicate)
                           .map(this::getMutation)
                           .collect(Collectors.toSet());
