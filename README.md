@@ -21,7 +21,7 @@ dependencies {
 
 # Usage
 
-The are a few important components this package provides (some of them come from [graphql-java-servlet](https://github.com/yrashk/graphql-java-servlet)):
+The are a few important components this package provides (some of them come from [graphql-java-servlet](https://github.com/graphql-java/graphql-java-servlet)):
 
 * GraphQLQueryProvider/GraphQLMutationProvider interfaces. These will allow you
   to define which "domain model" views and which commands you are going to expose.
