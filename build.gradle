@@ -5,7 +5,8 @@ buildscript {
     dependencies {
         classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.1.0'
         classpath 'com.netflix.nebula:gradle-aggregate-javadocs-plugin:2.2.+'
-
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
     }
 }
 
@@ -26,8 +27,7 @@ release {
 afterReleaseBuild.dependsOn bintrayUpload
 
 repositories {
-    jcenter()
-    mavenLocal()
+    mavenCentral()
 }
 
 apply plugin: 'java'
@@ -38,6 +38,9 @@ apply plugin: 'biz.aQute.bnd.builder'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+
+apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'com.bmuschko.nexus'
 
 license {
     header file('LICENSE-HEADER')
@@ -104,7 +107,7 @@ dependencies {
 
     // Unit testing
     testCompile 'org.testng:testng:6.9.10'
-    testCompile "org.mockito:mockito-core:1.+"
+    testCompile "org.mockito:mockito-core:1.10.19"
 
     // Remove boilerplate
     compile 'org.projectlombok:lombok:1.16.8'
@@ -116,15 +119,15 @@ dependencies {
     compile 'biz.aQute.bnd:biz.aQute.bndlib:3.1.0'
 
     // ES4J
-    compile 'com.eventsourcing:eventsourcing-core:0.4.0-SNAPSHOT'
+    compile 'com.eventsourcing:eventsourcing-core:0.4.0'
 
     // Servlet
     compile 'javax.servlet:javax.servlet-api:3.1.0'
 
     // GraphQL
     compile 'com.graphql-java:graphql-java:2.0.0'
-    compile 'graphql-java-annotations:graphql-java-annotations:0.8.4'
-    compile 'graphql-java-servlet:graphql-java-servlet:0.6.2'
+    compile 'com.graphql-java:graphql-java-annotations:0.9.0'
+    compile 'com.graphql-java:graphql-java-servlet:0.6.3'
 
     // JSON
     compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'
@@ -157,3 +160,38 @@ tasks.withType(JavaCompile) {
     options.compilerArgs << "-parameters"
 }
 
+extraArchive {
+    sources false
+    javadoc false
+}
+
+modifyPom {
+    project {
+        name 'eventsourcing-graphql'
+        description 'Eventsourcing GraphQL adaptor'
+        url 'https://github.com/eventsourcing/es4j-graphql'
+        inceptionYear '2016'
+
+        scm {
+            url 'https://github.com/eventsourcing/es4j-graphql'
+            connection 'scm:git:git://github.com/eventsourcing/es4j-graphql.git'
+            developerConnection 'scm:git:git@github.com:eventsourcing/es4j-graphql.git'
+        }
+
+        licenses {
+            license {
+                name 'Mozilla Public License, v. 2.0'
+                url 'http://mozilla.org/MPL/2.0/'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'yrashk'
+                name 'Yurii Rashkovskii'
+                email 'yrashk@gmail.com'
+            }
+        }
+    }
+}
