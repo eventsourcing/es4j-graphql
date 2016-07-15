@@ -11,13 +11,11 @@ You can download es4j-graphql from bintray (Gradle syntax):
 
 ```groovy
 repositories {
-    maven {
-        url  "http://dl.bintray.com/eventsourcing/maven"
-    }
+  mavenCentral()
 }
 
 dependencies {
-  compile 'com.eventsourcing:eventsourcing-graphql:0.3.1'
+  compile 'com.eventsourcing:eventsourcing-graphql:0.4.0'
 }
 ```
 
