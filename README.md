@@ -2,7 +2,7 @@
 
 # ES4J (Eventsourcing for Java) GraphQL adaptor
 
-This module implements a Relay.js-compatible GraphQL server intended to be used with [EJS4](https://github.com/eventsourcing/es4j) commands. It also supports
+This module implements a Relay.js-compatible GraphQL server intended to be used with [ES4J](https://github.com/eventsourcing/es4j) commands. It also supports
 OSGi out of the box.
 
 # Downloading
@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.eventsourcing:eventsourcing-graphql:0.4.0'
+  compile 'com.eventsourcing:eventsourcing-graphql:0.4.1'
 }
 ```
 
@@ -34,7 +34,7 @@ them in OSGi.
 @Accessors(fluent = true)
 @GraphQLName("test")
 @Value
-public static class TestCommand extends StandardCommand<String> {
+public static class TestCommand extends StandardCommand<Void, String> {
     private String value;
 }
 ```
