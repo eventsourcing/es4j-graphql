@@ -27,6 +27,7 @@ release {
 afterReleaseBuild.dependsOn bintrayUpload
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -49,7 +50,6 @@ license {
 jar {
     manifest {
         instruction 'Require-Capability', 'osgi.extender'
-        instruction 'Bundle-Activator', 'com.eventsourcing.graphql.BundleActivator'
     }
 }
 
@@ -125,9 +125,9 @@ dependencies {
     compile 'javax.servlet:javax.servlet-api:3.1.0'
 
     // GraphQL
-    compile 'com.graphql-java:graphql-java:2.1.0'
-    compile 'com.graphql-java:graphql-java-annotations:0.12.1'
-    compile 'com.graphql-java:graphql-java-servlet:0.7.0'
+    compile 'com.graphql-java:graphql-java:2.2.0'
+    compile 'com.graphql-java:graphql-java-annotations:0.13.0'
+    compile 'com.graphql-java:graphql-java-servlet:0.8.0'
 
     // JSON
     compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'

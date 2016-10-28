@@ -37,14 +37,16 @@ public class GraphQLCommandTest {
     @Accessors(fluent = true)
     @AllArgsConstructor
     public static class Result {
-        @Getter(onMethod = @__(@GraphQLField))
+        @Getter
+        @GraphQLField
         private String value;
     }
 
     @Accessors(fluent = true)
     @GraphQLName("test")
     public static class TestCommand extends StandardCommand<Void, Result> {
-        @Getter(onMethod = @__(@GraphQLField))
+        @Getter
+        @GraphQLField
         private final String value;
 
         public TestCommand(String value) {this.value = value;}

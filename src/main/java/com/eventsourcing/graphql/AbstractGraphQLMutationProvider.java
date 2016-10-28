@@ -47,7 +47,7 @@ public abstract class AbstractGraphQLMutationProvider implements GraphQLMutation
                                                                                     .type(GraphQLString)
                                                                                     .build()).build();
         GraphQLObjectType resultType = GraphQLAnnotations.objectBuilder(resultClass)
-                                                         .name(getClass().getSimpleName())
+                                                         .name(resultClass.getSimpleName())
                                                          .field(newFieldDefinition().name("clientMutationId")
                                                                                     .type(GraphQLString)
                                                                                     .dataFetcher(
