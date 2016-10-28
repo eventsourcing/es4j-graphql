@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-public class GraphQLContext<C extends Command> extends graphql.servlet.GraphQLContext {
+public class GraphQLContext<C extends Command<?, ?>> extends graphql.servlet.GraphQLContext {
     @Getter @Setter
     private Repository repository;
     @Getter @Setter
