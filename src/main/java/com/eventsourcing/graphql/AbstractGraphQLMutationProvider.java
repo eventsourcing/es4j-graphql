@@ -79,7 +79,7 @@ public abstract class AbstractGraphQLMutationProvider implements GraphQLMutation
                         for (Property property : layout.getProperties()) {
                             Object value = input.get(property.getName());
                             Object val = property.getTypeHandler() instanceof OptionalTypeHandler ? Optional
-                                    .of(value) : value;
+                                    .ofNullable(value) : value;
                             values.put(property, val);
                         }
 
